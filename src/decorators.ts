@@ -20,16 +20,24 @@ export function Controller(path: string = '') {
     const proto = target.prototype;
 
     // get middlewares
+    // :bm, 
+    // :Q, 按理说应该是 get 到 class 上的 meta data, 但是我并没有看到这个 MW_PREFIX key在别的地方引用呀
+    // :A, defined in `Use` decorator
     const mws = Reflect.getMetadata(MW_PREFIX, target) || [];
 
     // get routes
+    // [{name: string, method: string, path: string}]
     const routeDefs = Reflect.getMetadata(ROUTE_PREFIX, proto) || [];
-    const routes = [];
+    //:bm, 
+    // :Q, it seems here it's always an empty array
+    // :A, it got defined in `Route` decorator
+    const routes = []; 
 
     for(const route of routeDefs) {
       const fnMws = Reflect.getMetadata(`${MW_PREFIX}_${route.name}`, proto) || [];
+      //${PARAMS_PREFIX}_${route.name} is type  `[{ index, name, fn }]`
       const params = Reflect.getMetadata(`${PARAMS_PREFIX}_${route.name}`, proto) || [];
-
+      // collect & reformat routes info from 
       routes.push({
         method: route.method,
         url: posix.join('/', path, route.path),
@@ -94,6 +102,9 @@ export function Route(method: string, path: string = '') {
   return (target: any, name: string, descriptor: TypedPropertyDescriptor<any>) => {
     const meta = Reflect.getMetadata(ROUTE_PREFIX, target) || [];
     meta.push({ method, path, name });
+    // :bm
+    // :Q, why not define meta data into more specific property target?
+    // :A, so the author can get the info out all at once.
     Reflect.defineMetadata(ROUTE_PREFIX, meta, target);
   };
 }

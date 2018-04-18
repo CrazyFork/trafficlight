@@ -47,14 +47,17 @@ export function bindRoutes(routerRoutes: any, controllers: any[], getter?: (ctrl
   for(const ctrl of controllers) {
     const routes = Reflect.getMetadata(ROUTE_PREFIX, ctrl);
 
+    // name, Controller's method name
+    // params: [{index, name, fn}], 又 Inject decorator 定义
     for(const { method, url, middleware, name, params } of routes) {
       routerRoutes[method](url, ...middleware, async function(ctx, next) {
         const inst = getter === undefined ?
           new ctrl() : getter(ctrl);
 
         const args = getArguments(params, ctx, next);
+        // 这里如果指定了 @Inject, 就不能拿到 ctx 了, 反而是 @Inject 的值, 所以要拿 Context 需要通过 @Ctx decorator去拿
         const result = inst[name](...args);
-        if(result) {
+        if(result) { // Promise object
           const body = await result;
           if(body instanceof FileDownload) {
             const fileDownload = <FileDownload>body;

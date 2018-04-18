@@ -1,3 +1,36 @@
+
+## notes
+这个库还是蛮有意思的的. 从某种程度上让koa开发更像是java里边的spring了, 而且简化了些 koa 上的操作.
+
+以后如果写 koa 的话
+
+
+* 详细的关于 decorator 的执行顺序 https://www.typescriptlang.org/docs/handbook/decorators.html#decorator-evaluation
+* method 上面的 decorator 优于 class 上面的 decorator 执行
+
+  * 通过 `Reflect.getMetadata(MW_PREFIX, target) || [];` 这个 `MW_PREFIX` 的 refs 可以看出, method 上面的 `Reflect.defineMetadata` 是先执行的, 然后是 class instance 上面
+
+* 从上面的 decorator 执行顺序和 `Controller` decorator 的定义可以得知, Use 必须放在 `Controller` 之前声明
+
+
+* Controller 中如果指定了 @Inject, 就不能拿到 ctx 了, 反而是 @Inject 的值, 所以要拿 Context 需要通过 @Ctx decorator去拿
+
+```
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Trafficlight 🚦
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9976a79a48a048a4a2194864e064567c)](https://www.codacy.com/app/Swimlane/trafficlight?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=swimlane/trafficlight&amp;utm_campaign=Badge_Grade) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/9976a79a48a048a4a2194864e064567c)](https://www.codacy.com/app/Swimlane/trafficlight?utm_source=github.com&utm_medium=referral&utm_content=swimlane/trafficlight&utm_campaign=Badge_Coverage) [![Build Status](https://travis-ci.org/swimlane/trafficlight.svg?branch=master)](https://travis-ci.org/swimlane/trafficlight) [![npm version](https://badge.fury.io/js/trafficlight.svg)](https://badge.fury.io/js/trafficlight)
