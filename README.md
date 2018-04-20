@@ -11,6 +11,7 @@
   * 通过 `Reflect.getMetadata(MW_PREFIX, target) || [];` 这个 `MW_PREFIX` 的 refs 可以看出, method 上面的 `Reflect.defineMetadata` 是先执行的, 然后是 class instance 上面
 
 * 从上面的 decorator 执行顺序和 `Controller` decorator 的定义可以得知, Use 必须放在 `Controller` 之前声明
+  * 注意 decorator 的执行顺序, 高阶函数外层函数由上到下顺序执行, 高阶函数返回的函数由下到上顺序执行
 
 
 * Controller 中如果指定了 @Inject, 就不能拿到 ctx 了, 反而是 @Inject 的值, 所以要拿 Context 需要通过 @Ctx decorator去拿
